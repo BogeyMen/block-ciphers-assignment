@@ -62,44 +62,7 @@ def decrypt_image(image_filename: str, mode: str, key: bytes, iv=None):
     #This get the header and the data after
     header, encrypt_data = read_bmp_header(image_filename)
 
-    if mode == "CBC":
-        if iv is None:
-            raise ValueError("CBC decryption needs the IV returned by encrypt_image")
-        if len(iv) != 16:
-            raise ValueError("The CBC IV must be 16 bytes long")
-
-    #check the data can fit into a 16 byte block
-    if len(encrypt_data) == 0 or len(encrypt_data) % 16 != 0:
-        raise ValueError("The encrypted data is incomplete") 
-
-    #This set up AES with the same key from encryption
-    aes_ciper = AES.new(key, AES.MODE_ECB)
-    padd_pixel = bytearray()
-    previous_block =  iv
-
-    #This go through the encrypted data
-    for block_star in range(0, len(encrypt_data), 16):
-        encrypted_block = encrypt_data[block_star:block_star + 16]
-        block = bytearray(aes_ciper.decrypt(encrypted_block)) 
-        if mode == "CBC" and previous_block is not None:
-            for position in range(16):
-                block[position] = block[position]^previous_block[position]  
-
-        #This add the result and save the encrypted block for next time
-        padd_pixel.extend(block )
-        previous_block = encrypted_block
-
-    #last byte tell how much padding was added
-    padd_size =padd_pixel[-1]
-    if padd_size < 1 or padd_size > 16:
-        raise ValueError("The padding is wrong")
-
-    #check each padding byte hold the padding size
-    for position in range(len(padd_pixel) - padd_size, len(padd_pixel)):
-        if padd_pixel[position] != padd_size:
-            raise ValueError("The padding is wrong")
-    #This remove the padding from the end
-    pixels = padd_pixel[:-padd_size] 
+    pixels = decrypt_data(encrypt_data, mode, key, iv)
 
     #This make the name for the decrypted image
 
@@ -113,6 +76,45 @@ def decrypt_image(image_filename: str, mode: str, key: bytes, iv=None):
     output_file.close() 
 
     return output_filename
+
+
+# This is the general decryption data function.
+def decrypt_data(encrypted_data, mode: str, key: bytes, iv=None):
+    mode = mode.upper()
+
+    if mode not in ("ECB", "CBC"):
+        raise ValueError("Mode must be ECB or CBC")
+    if mode == "CBC":
+        if iv is None:
+            raise ValueError("CBC decryption needs an IV")
+        if len(iv) != 16:
+            raise ValueError("The CBC IV must be 16 bytes long")
+
+    if len(encrypted_data) == 0 or len(encrypted_data) % 16 != 0:
+        raise ValueError("The encrypted data is incomplete")
+
+    aes_cipher = AES.new(key, AES.MODE_ECB)
+    padded_data = bytearray()
+    previous_block = iv
+
+    for block_start in range(0, len(encrypted_data), 16):
+        encrypted_block = encrypted_data[block_start:block_start + 16]
+        block = bytearray(aes_cipher.decrypt(encrypted_block))
+
+        if mode == "CBC":
+            for position in range(16):
+                block[position] ^= previous_block[position]
+
+        padded_data.extend(block)
+        previous_block = encrypted_block
+
+    padding_size = padded_data[-1]
+    if padding_size < 1 or padding_size > 16:
+        raise ValueError("The padding is wrong")
+    if padded_data[-padding_size:] != bytes([padding_size]) * padding_size:
+        raise ValueError("The padding is wrong")
+
+    return bytes(padded_data[:-padding_size])
 
 #This is the general encyption data function 
 def encrypt_data(pixels, mode: str, key=None, iv=None):
