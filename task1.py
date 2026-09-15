@@ -32,54 +32,16 @@ def encrypt_image(filename: str, mode: str, key=None, iv=None):
     mode = mode.upper()
 
     #This call the first function to get the header and image data
-    header, pixels = read_bmp_header(filename)  
+    header, pixels = read_bmp_header(filename)
 
-    #If there is no key this make a random 16 byte key
-    if key is None:
-        key = get_random_bytes(16)
-    
-    #make the IV for CBC to mix with the first block
-    if mode == "CBC":
-        if iv is None:
-            iv = get_random_bytes(16)
-    else: 
-        iv = None
-
-    #add paddinglast block is full 
-    padd_size = 16-len(pixels) % 16
-    # make the image data changeable so we can add padding
-    padd_pixel= bytearray(pixels)
-
-    #This add padding at the end using the padding size as the value
-    for position in range(padd_size):
-        padd_pixel.append(padd_size)
-    
-    #This set up AES with the key to encrypt one block at a time
-    aes_ciper = AES.new(key,AES.MODE_ECB)
-    encrypt_data = bytearray()
-    previous_block = iv
-
-    #This go through image data
-    for block_star in range(0, len(padd_pixel), 16):
-        #This grab the next 16 bytes and make the block changeable
-        block = bytearray(padd_pixel[block_star:block_star + 16])
-
-        # check if we need to mix the block for CBC
-        if mode =="CBC" and previous_block is not None:
-            for position in range(16):
-                block[position] = block[position] ^ previous_block[position]
-        
-        #This encrypt the block using AES
-        encrypted_block = aes_ciper.encrypt(bytes(block))
-        encrypt_data.extend(encrypted_block )
-        previous_block = encrypted_block
+    #This call the encode function with the image data
+    encrypt_data, key, iv = globals()["encrypt_data"](pixels, mode, key, iv)
 
     #put the BMP header at the start of the output
     combined_data = bytearray(header)
 
     #This add the encrypted image data after that
     combined_data.extend(encrypt_data)
-
 
     #This remove the file extension from the name
     file_start = os.path.splitext(filename)[0]
@@ -89,7 +51,6 @@ def encrypt_image(filename: str, mode: str, key=None, iv=None):
     output_file = open(output_filename, "wb")
     output_file.write(combined_data)
     output_file.close()
-
 
     return output_filename, key, iv
     
@@ -153,11 +114,62 @@ def decrypt_image(image_filename: str, mode: str, key: bytes, iv=None):
 
     return output_filename
 
+#This is the general encyption data function 
+def encrypt_data(pixels, mode: str, key=None, iv=None):
+    #turn the mode into uppercase so cbc -> CBC
+    mode = mode.upper()
+
+    #This turn a string into bytes
+    if isinstance(pixels, str):
+        pixels = pixels.encode("utf-8")
+
+    #If there is no key this make a random 16 byte key
+    if key is None:
+        key = get_random_bytes(16)
+    
+    #make the IV for CBC to mix with the first block
+    if mode == "CBC":
+        if iv is None:
+            iv = get_random_bytes(16)
+    else: 
+        iv = None
+
+    #add paddinglast block is full 
+    padd_size = 16-len(pixels) % 16
+    # make the image data changeable so we can add padding
+    padd_pixel= bytearray(pixels)
+
+    #This add padding at the end using the padding size as the value
+    for position in range(padd_size):
+        padd_pixel.append(padd_size)
+    
+    #This set up AES with the key to encrypt one block at a time
+    aes_ciper = AES.new(key,AES.MODE_ECB)
+    encrypt_data = bytearray()
+    previous_block = iv
+
+    #This go through image data
+    for block_star in range(0, len(padd_pixel), 16):
+        #This grab the next 16 bytes and make the block changeable
+        block = bytearray(padd_pixel[block_star:block_star + 16])
+
+        # check if we need to mix the block for CBC
+        if mode =="CBC" and previous_block is not None:
+            for position in range(16):
+                block[position] = block[position] ^ previous_block[position]
+        
+        #This encrypt the block using AES
+        encrypted_block = aes_ciper.encrypt(bytes(block))
+        encrypt_data.extend(encrypted_block )
+        previous_block = encrypted_block
+
+    return bytes(encrypt_data), key, iv
 
 
 
-key = get_random_bytes(16)
-iv = get_random_bytes(16)
+if __name__ == "__main__":
+    key = get_random_bytes(16)
+    iv = get_random_bytes(16)
 
-encrypt_image("cp-logo.bmp", "ECB", key)
-encrypt_image("cp-logo.bmp", "CBC", key, iv)
+    encrypt_image("cp-logo.bmp", "ECB", key)
+    encrypt_image("cp-logo.bmp", "CBC", key, iv)
