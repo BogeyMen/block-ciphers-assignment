@@ -1,0 +1,245 @@
+Task 1 part a: SHA256 in hexadecimal
+Message = b'Hi Bob!'
+Digest = b973db5647786eaf8743ca49d80e9c503b91dc5d36d57d716bbd64693d9469c3
+Message = b'Hi Alice!'
+Digest = 7691e9cc1294b94ac60e7c35a1289b42e1802f17d879f9d7c7dd4f39eaf70f2a
+Message = b'Hello!'
+Digest = 334d016f755cd6dc58c53a86e183882f8ec14f52fb05345887c8a5edd42c87b7
+
+Task 1 part b: change only one bit
+
+Original message= b'Hi Bob!'
+Changed message= b'Ii Bob!'
+First digest= b973db5647786eaf8743ca49d80e9c503b91dc5d36d57d716bbd64693d9469c3
+Second digest= 82d8ccd399bc49d974cb5e6d68d1745615fdd2b215818e525e53c3a37fbe5092
+Different input bits= 1
+Different digest bits= 128
+Different digest bytes= 32
+
+Original message= b'Hi Alice!'
+Changed message= b'Ii Alice!'
+First digest= 7691e9cc1294b94ac60e7c35a1289b42e1802f17d879f9d7c7dd4f39eaf70f2a
+Second digest= e65700400985af05451d65610ea734d3d0aca3a24183efc08a66677f5ccd9abf
+Different input bits= 1
+Different digest bits= 123
+Different digest bytes= 32
+
+Original message= b'Hello!'
+Changed message= b'Iello!'
+First digest= 334d016f755cd6dc58c53a86e183882f8ec14f52fb05345887c8a5edd42c87b7
+Second digest= 6c88f0dc048ffbc8a5dea82010b466566856ac4aa0714d4558173e5bb54f327c
+Different input bits= 1
+Different digest bits= 150
+Different digest bytes= 32
+
+Original message= b'computer security'
+Changed message= b'bomputer security'
+First digest= a97b84e295de545881d2915211fe240589b2475d90025e61acf7206a2c17a057
+Second digest= 1046704a0f56e921fa4f0c50f5ee0ba0f8be2d37e2bc0cdd044df766d2ba1bad
+Different input bits= 1
+Different digest bits= 138
+Different digest bytes= 32
+
+Original message= b'SHA256'
+Changed message= b'RHA256'
+First digest= b3abe5d8c69b38733ad57ea75e83bcae42bbbbac75e3a5445862ed2f8a2cd677
+Second digest= 0f4d4e58728e6d3dd073708c0ccce312fd05c650641b89c24ac43478b9d82f89
+Different input bits= 1
+Different digest bits= 142
+Different digest bytes= 32
+
+Task 1 part c: find truncated collisions
+
+Searching 8 bits
+First message = b'hash-lab-8:18'
+Second message = b'hash-lab-8:29'
+Same truncated digest = c6
+Inputs hashed = 30
+Collision time = 5.7e-05 seconds
+
+Searching 10 bits
+First message = b'hash-lab-10:30'
+Second message = b'hash-lab-10:46'
+Same truncated digest = 367
+Inputs hashed = 47
+Collision time = 8.3e-05 seconds
+
+Searching 12 bits
+First message = b'hash-lab-12:1'
+Second message = b'hash-lab-12:43'
+Same truncated digest = e3e
+Inputs hashed = 44
+Collision time = 7.4e-05 seconds
+
+Searching 14 bits
+First message = b'hash-lab-14:110'
+Second message = b'hash-lab-14:149'
+Same truncated digest = 04b6
+Inputs hashed = 150
+Collision time = 0.000247 seconds
+
+Searching 16 bits
+First message = b'hash-lab-16:16'
+Second message = b'hash-lab-16:220'
+Same truncated digest = 2094
+Inputs hashed = 221
+Collision time = 0.000391 seconds
+
+Searching 18 bits
+First message = b'hash-lab-18:329'
+Second message = b'hash-lab-18:733'
+Same truncated digest = 0d27e
+Inputs hashed = 734
+Collision time = 0.001324 seconds
+
+Searching 20 bits
+First message = b'hash-lab-20:2363'
+Second message = b'hash-lab-20:2753'
+Same truncated digest = 8a999
+Inputs hashed = 2754
+Collision time = 0.00466 seconds
+
+Searching 22 bits
+First message = b'hash-lab-22:1333'
+Second message = b'hash-lab-22:1497'
+Same truncated digest = 3f8df9
+Inputs hashed = 1498
+Collision time = 0.002437 seconds
+
+Searching 24 bits
+First message = b'hash-lab-24:582'
+Second message = b'hash-lab-24:2771'
+Same truncated digest = f9be31
+Inputs hashed = 2772
+Collision time = 0.004587 seconds
+
+Searching 26 bits
+First message = b'hash-lab-26:8218'
+Second message = b'hash-lab-26:15557'
+Same truncated digest = 1ff13cf
+Inputs hashed = 15558
+Collision time = 0.026977 seconds
+
+Searching 28 bits
+First message = b'hash-lab-28:20996'
+Second message = b'hash-lab-28:22155'
+Same truncated digest = bf72bb8
+Inputs hashed = 22156
+Collision time = 0.036761 seconds
+
+Searching 30 bits
+First message = b'hash-lab-30:4543'
+Second message = b'hash-lab-30:19957'
+Same truncated digest = 37a21381
+Inputs hashed = 19958
+Collision time = 0.033239 seconds
+
+Searching 32 bits
+First message = b'hash-lab-32:26242'
+Second message = b'hash-lab-32:61847'
+Same truncated digest = 2d8b11f9
+Inputs hashed = 61848
+Collision time = 0.102261 seconds
+
+Searching 34 bits
+First message = b'hash-lab-34:53151'
+Second message = b'hash-lab-34:207315'
+Same truncated digest = 3ee165ece
+Inputs hashed = 207316
+Collision time = 0.366134 seconds
+
+Searching 36 bits
+First message = b'hash-lab-36:66458'
+Second message = b'hash-lab-36:290829'
+Same truncated digest = 77a612043
+Inputs hashed = 290830
+Collision time = 0.503583 seconds
+
+Searching 38 bits
+First message = b'hash-lab-38:146504'
+Second message = b'hash-lab-38:679697'
+Same truncated digest = 1c1bb6f9b0
+Inputs hashed = 679698
+Collision time = 1.222154 seconds
+
+Searching 40 bits
+First message = b'hash-lab-40:1060632'
+Second message = b'hash-lab-40:1441562'
+Same truncated digest = 07b37cb5eb
+Inputs hashed = 1441563
+Collision time = 2.592706 seconds
+
+Searching 42 bits
+First message = b'hash-lab-42:368964'
+Second message = b'hash-lab-42:3514791'
+Same truncated digest = 126ae24acd4
+Inputs hashed = 3514792
+Collision time = 6.661565 seconds
+
+Searching 44 bits
+First message = b'hash-lab-44:816148'
+Second message = b'hash-lab-44:860612'
+Same truncated digest = 9d5e73fbffb
+Inputs hashed = 860613
+Collision time = 1.515808 seconds
+
+Searching 46 bits
+Tested 5000000 inputs
+Tested 10000000 inputs
+Tested 15000000 inputs
+First message = b'hash-lab-46:5215323'
+Second message = b'hash-lab-46:15458695'
+Same truncated digest = 3f05d53a98b9
+Inputs hashed = 15458696
+Collision time = 29.506787 seconds
+
+Searching 48 bits
+Tested 5000000 inputs
+Tested 10000000 inputs
+First message = b'hash-lab-48:3943403'
+Second message = b'hash-lab-48:14126910'
+Same truncated digest = 0c6abc7d91ad
+Inputs hashed = 14126911
+Collision time = 26.011511 seconds
+
+Searching 50 bits
+Tested 5000000 inputs
+Tested 10000000 inputs
+Tested 15000000 inputs
+Tested 20000000 inputs
+Tested 25000000 inputs
+Tested 30000000 inputs
+Tested 35000000 inputs
+Tested 40000000 inputs
+Tested 45000000 inputs
+First message = b'hash-lab-50:4415507'
+Second message = b'hash-lab-50:46462973'
+Same truncated digest = 100ecace4e362
+Inputs hashed = 46462974
+Collision time = 91.617515 seconds
+
+All collision searches finished
+
+Digest bits    Inputs hashed    Collision time (seconds)
+8              30               0.000057068
+10             47               0.000083447
+12             44               0.000074497
+14             150              0.000247271
+16             221              0.000391115
+18             734              0.001324042
+20             2754             0.004660008
+22             1498             0.002437016
+24             2772             0.004586777
+26             15558            0.026976633
+28             22156            0.036760735
+30             19958            0.033239328
+32             61848            0.102260738
+34             207316           0.366134221
+36             290830           0.503582701
+38             679698           1.222153641
+40             1441563          2.592706440
+42             3514792          6.661565037
+44             860613           1.515807832
+46             15458696         29.506787108
+48             14126911         26.011510841
+50             46462974         91.617514733
